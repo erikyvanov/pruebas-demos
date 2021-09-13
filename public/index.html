@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Events</title>
+</head>
+
+<body>
+    <script>
+        function randInt(to) {
+            return Math.floor(Math.random() * (to - 1)) + 1
+        }
+    </script>
+    <script>
+        var socket = new WebSocket("ws://127.0.0.1:8080/ws?id=web" + Math.floor(Math.random() * (1000 - 1)) + 1);
+        socket.onopen = function (event) {
+            console.log("on open");
+        };
+
+        socket.onmessage = function (event) {
+            console.log(event.data);
+        };
+
+        function newInvitationEvent(params) {
+            var newInvitation = getNewInvitationJSON()
+            console.log(newInvitation);
+            socket.send(JSON.stringify(newInvitation));
+        }
+
+        function getNewInvitationJSON() {
+            return {
+                "entity_name": "user_space",
+                "event_name": "invitation",
+                "data": {
+                    "id": randInt(20000) + "",
+                    "name": "Nuevo " + randInt(1000),
+                    "members": randInt(41)
+                }
+            }
+        }
+    </script>
+    <h1>Send events</h1>
+
+    <div>
+        <button onclick="newInvitationEvent()">New Invitation</button>
+    </div>
+</body>
+
+</html>
