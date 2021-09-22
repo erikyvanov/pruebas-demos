@@ -21,7 +21,7 @@ func WebsocketEventHandler(c *websocket.Conn) {
 	c.SetPingHandler(func(appData string) error {
 		err := c.WriteMessage(websocket.PongMessage, nil)
 		if err != nil {
-			socketService.DeleteClient <- client.ID
+			socketService.DeleteClientId <- client.ID
 			return err
 		}
 		return nil
@@ -33,7 +33,7 @@ func WebsocketEventHandler(c *websocket.Conn) {
 		var msg models.Event
 
 		if err = c.ReadJSON(&msg); err != nil {
-			socketService.DeleteClient <- client.ID
+			socketService.DeleteClientId <- client.ID
 			break
 		}
 
